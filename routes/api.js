@@ -33,6 +33,19 @@ module.exports = function (app) {
     .post(function (req, res){
       var title = req.body.title;
       //response will contain new book object including atleast _id and title
+      if (title == '') {
+        res.send('missing title');
+      }
+    
+      db.collection('personal-library').save(req.body, (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        return res.json({
+          title: title,
+          _id: req.body._id
+        });
+      });
     })
     
     .delete(function(req, res){
