@@ -12,9 +12,17 @@ var expect = require('chai').expect;
 var MongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectId;
 const MONGODB_CONNECTION_STRING = process.env.DB;
+var db;
 //Example connection: MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {});
 
 module.exports = function (app) {
+  MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, database) {
+    if(err) {
+      console.log(err);
+    }
+    console.log('Connected...');
+    db = database;
+  });
 
   app.route('/api/books')
     .get(function (req, res){
