@@ -32,13 +32,19 @@ module.exports = function (app) {
         if (err) {
           console.log(err);
         }
-        res.json(results);
+        else {
+          results.forEach(element => {
+            element.commentcount = element.comments.length;
+            delete element.comments;
+          });
+          res.json(results);
+        }
       });
     })
     
     .post(function (req, res){
       var title = req.body.title;
-      req.body.commentcount = [];
+      req.body.comments = [];
       //response will contain new book object including atleast _id and title
       if (title == '') {
         res.send('missing title');
@@ -52,7 +58,7 @@ module.exports = function (app) {
           return res.json({
             title: title,
             _id: req.body._id,
-            commentcount: req.body.commentcount.length
+            comments: req.body.comments
           });
         }
       });  
