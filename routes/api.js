@@ -73,7 +73,19 @@ module.exports = function (app) {
   app.route('/api/books/:id')
     .get(function (req, res){
       var bookid = req.params.id;
+      var objId = new ObjectId(bookid); 
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
+      db.collection('personal-library').find({_id: objId}).toArray((err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        if (result.length > 0) {
+          res.json(result);
+        }            
+        else {
+          res.send('no book exists');
+        }
+      });
     })
     
     .post(function(req, res){
