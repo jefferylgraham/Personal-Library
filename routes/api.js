@@ -28,24 +28,34 @@ module.exports = function (app) {
     .get(function (req, res){
       //response will be array of book objects
       //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
+      db.collection('personal-library').find().toArray((err, results) => {
+        if (err) {
+          console.log(err);
+        }
+        res.json(results);
+      });
     })
     
     .post(function (req, res){
       var title = req.body.title;
+      req.body.commentcount = [];
       //response will contain new book object including atleast _id and title
       if (title == '') {
         res.send('missing title');
       }
-    
+      
       db.collection('personal-library').save(req.body, (err, result) => {
         if (err) {
           console.log(err);
         }
-        return res.json({
-          title: title,
-          _id: req.body._id
-        });
-      });
+        else {
+          return res.json({
+            title: title,
+            _id: req.body._id,
+            commentcount: req.body.commentcount.length
+          });
+        }
+      });  
     })
     
     .delete(function(req, res){
