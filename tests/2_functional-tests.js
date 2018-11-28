@@ -114,7 +114,17 @@ suite('Functional Tests', function() {
     suite('POST /api/books/[id] => add comment/expect book object with id', function(){
       
       test('Test POST /api/books/[id] with comment', function(done){
-        //done();
+        chai.request(server)
+          .post('/api/books/5bfcabb2977a00744b3d2806')
+          .send({comment: 'cool book!'})
+          .end(function(err, res) {
+            assert.equal(res.status, 200);
+            assert.property(res.body, 'title');
+            assert.property(res.body, 'comments');
+            assert.isArray(res.body.comments);
+            assert.isAbove(res.body.comments.length, 0);
+            done();
+        })
       });
       
     });
