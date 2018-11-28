@@ -90,8 +90,22 @@ module.exports = function (app) {
     
     .post(function(req, res){
       var bookid = req.params.id;
+      var objId = new ObjectId(bookid);
       var comment = req.body.comment;
       //json res format same as .get
+      db.collection('personal-library').findAndModify(
+          {_id: objId}, 
+          [['_id','asc']],
+          {$push: {comments: comment }}, 
+          {new: true},
+          (err, book)=> {
+            if (err) {
+              console.log(err)
+            }
+            else {
+              res.json(book.value);
+            }
+          });
     })
     
     .delete(function(req, res){
