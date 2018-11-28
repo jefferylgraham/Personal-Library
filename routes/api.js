@@ -66,6 +66,14 @@ module.exports = function (app) {
     
     .delete(function(req, res){
       //if successful response will be 'complete delete successful'
+      db.collection('personal-library').deleteMany({}, (err, result) => {
+        if(err){
+          console.log(err);
+        }
+        else {
+          return res.send('complete delete successful');
+        }
+      })
     });
 
 
@@ -110,7 +118,16 @@ module.exports = function (app) {
     
     .delete(function(req, res){
       var bookid = req.params.id;
+      var objId = new ObjectId(bookid);
       //if successful response will be 'delete successful'
+      db.collection('personal-library').deleteOne({_id: objId}, (err, book) => {
+        if (err) {
+          console.log(err);
+        }
+        else {
+          return res.send('delete successful');
+        }
+      });
     });
   
 };
